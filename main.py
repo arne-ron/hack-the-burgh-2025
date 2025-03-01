@@ -35,21 +35,17 @@ LiDAR_1_small = LiDAR_1.resize((1000, 1000))
 print("Running...")
 
 
-# arr = np.array(LiDAR_1_small)
-# red = run_kernel1D_arr(arr, xSobel)
-# green = run_kernel1D_arr(arr, ySobel)
-red = np.full((100,100), 100)
-green = np.full((100,100), 50)
+arr = np.array(LiDAR_1_small)
+red = run_kernel1D_arr(arr, xSobel)
+green = run_kernel1D_arr(arr, ySobel)
 
-stack = np.dstack((red, green, np.zeros((100,100))))
-tupleArrayLong = [tuple(row) for row in stack.reshape(-1, 3)]
-print(tupleArrayLong)
-combined = np.array(tupleArrayLong, ndmin=2).reshape(100, 100, 3)
-print(combined)
-print(combined.shape, " i=10, j=10: ", combined[10, 10])
-data = np.full(shape=(256, 256, 3), fill_value=[0,0,0], dtype=np.uint8)
-gradient = Image.fromarray(data, "RGB")
-# np.dstack((red, green, np.zeros((100,100))))
+stack = np.dstack((red, green, np.zeros(LiDAR_1_small.size))).astype(np.uint8)
+
+
+
+
+# data = np.full(shape=(256, 256, 3), fill_value=[0,0,0], dtype=np.uint8)
+gradient = Image.fromarray(stack, "RGB")
 
 # print("size:", gradient.size)
 gradient.show()
