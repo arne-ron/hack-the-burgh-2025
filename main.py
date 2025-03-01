@@ -44,10 +44,7 @@ stack = np.dstack((red, green, np.zeros(LiDAR_1_small.size))).astype(np.uint8)
 
 
 
-# data = np.full(shape=(256, 256, 3), fill_value=[0,0,0], dtype=np.uint8)
 gradient = Image.fromarray(stack, "RGB")
-
-# print("size:", gradient.size)
 gradient.show()
 
 
