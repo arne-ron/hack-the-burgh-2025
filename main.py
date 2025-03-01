@@ -5,6 +5,7 @@ import numpy as np
 
 from run_kernel import run_kernelRGB, run_kernel1D, run_kernel1D_arr
 from kernels import xSobel, ySobel
+from upscale_array import upscaleArray
 
 
 # Original satelite images with 10m x 10m accuracy
@@ -53,6 +54,16 @@ gradient = Image.fromarray(data, "RGB")
 
 # print("size:", gradient.size)
 gradient.show()
+
+
+#Upscale the image - from 1 pixel to 10 pixels
+sat_1_small = sat_1.resize((100, 100)) #using smaller ver to save time
+array = np.array(sat_1_small)
+newImage = upscaleArray(array)
+sImg = Image.fromarray(newImage, "RGB")  
+sImg.show()
+
+
 
 
 print("Done")
