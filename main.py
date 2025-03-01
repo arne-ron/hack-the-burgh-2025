@@ -40,19 +40,19 @@ arr = np.array(LiDAR_1_small)
 red = run_kernel1D_arr(arr, xSobel)
 green = run_kernel1D_arr(arr, ySobel)
 
-stack = np.dstack((red, green, np.zeros(LiDAR_1_small.size))).astype(np.uint8)
+gradientArr = np.dstack((red, green, np.zeros(LiDAR_1_small.size))).astype(np.uint8)
 
 
 
 
-gradient = Image.fromarray(stack, "RGB")
+gradient = Image.fromarray(gradientArr, "RGB")
 gradient.show()
 
 
 #Upscale the image - from 1 pixel to 10 pixels
-sat_1_small = sat_1.resize((100, 100)) #using smaller ver to save time
 array = np.array(sat_1_small)
-newImage = upscaleArray(array)
+newImage = upscaleArray(array, gradientArr)
+print(newImage)
 sImg = Image.fromarray(newImage, "RGB")  
 sImg.show()
 
