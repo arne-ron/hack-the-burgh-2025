@@ -90,8 +90,8 @@ def run_kernel1D_arr(img_arr, kernel) -> float:
         vals[i, j] = 0
     
 
-    for i in range(imageHeight//2):
-        for j in range(imageWidth//2):
+    for i in range(imageHeight):
+        for j in range(imageWidth):
             if (j == 0 or j == imageWidth - 1) or (i == 0 or i == imageHeight - 1):
                 put_zeroes(i, j)
                 continue
