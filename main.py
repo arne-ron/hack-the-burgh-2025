@@ -3,10 +3,7 @@ import numpy as np
 import time
 
 
-from run_kernel import run_kernelRGB, run_kernel1D, run_kernel1D_arr
-#from upscale_array import upscaleArray, upscaleArrayNew
-from landuse_objects import landuse_objects, combineLanduseMaps
-from normalize import normalize
+from landuse_objects import landuse_objects
 
 
 from get_gradient import get_gradient
@@ -47,31 +44,24 @@ if RUN_REDUCED:
 array = np.array(sat_img)
 LiDAR_arr = np.array(LiDAR_img)
 
-# gradient_arr = get_gradient(LiDAR_arr)
+gradient_arr = get_gradient(LiDAR_arr)
 
-# print("Processing...")
-# new_image_arr = upscale_array(array, gradient_arr, LiDAR_arr, threshold=10)
-# img_res = Image.fromarray(new_image_arr, "RGB")
-# img_res.save(output_path_sat)
-# img_res.show()
-# end_time = time.time()
-# print(f"Done in {end_time - start_time} seconds")
+print("Processing...")
+new_image_arr = upscale_array(array, gradient_arr, LiDAR_arr, threshold=10)
+img_res = Image.fromarray(new_image_arr, "RGB")
+img_res.save(output_path_sat)
+img_res.show()
+end_time = time.time()
+print(f"Done in {end_time - start_time} seconds")
 
 
-# # Upscale the image - from 1 pixel to 10 pixels
-# array = np.array(sat_1)
-# gradient_arr = np.array(gradient)
-# new_image_arr = upscaleArray(array, gradient_arr, threshold=5)
-# img_res = Image.fromarray(new_image_arr, "RGB")  
-# img_res.show()
-# sat_1.show()
-# img_res.save(output_path_sat)
-
+print("Analyzing...")
 landuseLiDARImage = np.array(normalized_LiDAR.resize((1000,1000)))
 landuseSatImage = np.array(sat_img.resize((1000,1000)))
 landuseRedImage = np.array(sat_2_img.resize((1000,1000)))
 
 landuse_objects(landuseLiDARImage, landuseSatImage, landuseRedImage)
-combineLanduseMaps(landuseLiDARImage)
+print("Program done")
+
 
 

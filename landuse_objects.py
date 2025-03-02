@@ -59,20 +59,45 @@ def landuse_objects(LiDAR_image, sat_image, red_image):
                 weighted_color = [int(c * weighting) for c in obj.disColor]
                 newImage[i][j] = weighted_color
         classified_images[obj.name] = newImage
-        print(newImage)
-        Image.fromarray(newImage.astype(npm.uint8), "RGB").show()
-    urban_array = classified_images["Urban"]
+        # Image.fromarray(newImage.astype(npm.uint8), "RGB").show()
+    urban_array = Image.fromarray(classified_images["Urban"].astype(npm.uint8), "RGB")
+    grassland_array = Image.fromarray(classified_images["Grassland"].astype(npm.uint8), "RGB")
+    water_array = Image.fromarray(classified_images["Water"].astype(npm.uint8), "RGB")
+    industrial_array = Image.fromarray(classified_images["Industrial"].astype(npm.uint8), "RGB")
     grassland_array = classified_images["Grassland"]
     water_array = classified_images["Water"]
     industrial_array = classified_images["Industrial"]
-    comparison_image = npm.zeros_like(urban_array, dtype=npm.uint8)
+    urban_array = classified_images["Urban"]
+
+
+    comparison_image = npm.full_like(urban_array, (0,0,0), dtype=npm.uint8)
 
     for i in range(LiDAR_image.shape[0]):
         for j in range(LiDAR_image.shape[1]):
+
+            val = comparison_image[i, j]
+
+            if water_array[i,j,0] > 60:
+                val = (80, 80, 140)
+            if grassland_array[i, j,0] > 65:
+                val = (70, 130, 70)
+            if urban_array[i,j,0] > 30:
+                val = (95, 80, 80)
+            if industrial_array[i, j, 0] > 15:
+                val = (220, 220, 220)
+
+            comparison_image[i, j] = val
+            continue
+
+
+            #####
+            # Deprecated Code
+            #####
+
             # Compute intensity values for each classification
             urban_value = npm.mean(urban_array[i, j])
             grassland_value = npm.mean(grassland_array[i, j])
-            water_value = npm.mean(water_array[i, j])
+            water_value = 1/3*npm.mean(water_array[i, j])
             industrial_value = npm.mean(industrial_array[i, j])
 
             # Determine the strongest classification
@@ -88,4 +113,6 @@ def landuse_objects(LiDAR_image, sat_image, red_image):
                 comparison_image[i, j] = (220,220,220)
 
     # Show the final classified image
-    Image.fromarray(comparison_image, "RGB").show()
+    final_res = Image.fromarray(comparison_image, "RGB")
+    final_res.save("classification.png")
+    final_res.show()
