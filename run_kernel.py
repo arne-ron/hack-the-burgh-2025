@@ -92,7 +92,7 @@ def run_kernel1D_arr(img_arr, kernel) -> float:
 
     for i in range(imageHeight):
         for j in range(imageWidth):
-            if (j == 0 or j == imageWidth - 1) or (i == 0 or i == imageHeight - 1):
+            if (j < kernelWidth // 2 or j >= imageWidth - kernelWidth // 2) or (i < kernelHeight // 2 or i >= imageHeight - kernelHeight // 2):
                 put_zeroes(i, j)
                 continue
             window = img_arr[i - kernelHeight//2 : i + kernelHeight//2 + 1, j - kernelWidth//2 : j + kernelWidth//2 + 1]
