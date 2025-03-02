@@ -6,7 +6,7 @@ import time
 
 from run_kernel import run_kernelRGB, run_kernel1D, run_kernel1D_arr
 from kernels import xSobel, ySobel, ySobelBig
-from upscale_array import upscaleArray, upscaleArrayNew
+#from upscale_array import upscaleArray, upscaleArrayNew
 from clamp import clamp
 from landuse_objects import landuse_objects
 from normalize import normalize
@@ -52,13 +52,13 @@ start_time = time.time()
 print("Running...")
 
 
-# Upscale the image - from 1 pixel to 10 pixels
-array = np.array(sat_1)
-gradient_arr = np.array(gradient)
-new_image_arr = upscaleArrayNew(array, gradient_arr, np.array(LiDAR), threshold=5)
-img_res = Image.fromarray(new_image_arr, "RGB")
-img_res.save(output_path_sat)
-img_res.show()
+# # Upscale the image - from 1 pixel to 10 pixels
+# array = np.array(sat_1)
+# gradient_arr = np.array(gradient)
+# new_image_arr = upscaleArrayNew(array, gradient_arr, np.array(LiDAR), threshold=5)
+# img_res = Image.fromarray(new_image_arr, "RGB")
+# img_res.save(output_path_sat)
+# img_res.show()
 
 
 # # Upscale the image - from 1 pixel to 10 pixels
