@@ -9,12 +9,16 @@ def landuse_objects(LiDAR_image, sat_image, red_image):
             self.redColor = redColor
             self.disColor = disColor
 
-    grassland = LandUseObject("Grassland", 63, (70,100,70), (184,80,95), (70,130,70))
-    #forest = LandUseObject("Forest", 0, (0,50,0), 0)
-    water = LandUseObject("Water", 0, (0,0,30), (0,0,0), (80,80,140))
-    urban = LandUseObject("Urban", 160, (95,80,80), (0,0,0), (95,80,80))
-    industrial = LandUseObject("Industrial", 255, (220,220,220), (0,0,0), (220,220,220))
-    #agriculture = LandUseObject("Agriculture", 0, (255,255,0), 0)
+    # grassland = LandUseObject("Grassland", 63, (70,100,70), (184,80,95), (70,130,70))
+    # water = LandUseObject("Water", 0, (0,0,30), (0,0,0), (80,80,140))
+    # urban = LandUseObject("Urban", 160, (95,80,80), (0,0,0), (95,80,80))
+    # industrial = LandUseObject("Industrial", 255, (220,220,220), (0,0,0), (220,220,220))
+    grassland = LandUseObject("Grassland", 63, (70,100,70), (184,80,95), (100,0,0))
+    water = LandUseObject("Water", 0, (0,0,30), (0,0,0), (100,0,0))
+    urban = LandUseObject("Urban", 160, (95,80,80), (0,0,0), (100,0,0))
+    industrial = LandUseObject("Industrial", 255, (220,220,220), (0,0,0), (100,0,0))
+    classified_images = {}
+
     for obj in [urban, industrial, grassland, water]:
         newImage = npm.full([*LiDAR_image.shape, 3], 3)
         for i in range(LiDAR_image.shape[0]):
@@ -54,5 +58,34 @@ def landuse_objects(LiDAR_image, sat_image, red_image):
                     weighting = (elevation_weighting + redColor_weighting + satColor_weighting)
                 weighted_color = [int(c * weighting) for c in obj.disColor]
                 newImage[i][j] = weighted_color
-                print(weighted_color)
+        classified_images[obj.name] = newImage
+        print(newImage)
         Image.fromarray(newImage.astype(npm.uint8), "RGB").show()
+    urban_array = classified_images["Urban"]
+    grassland_array = classified_images["Grassland"]
+    water_array = classified_images["Water"]
+    industrial_array = classified_images["Industrial"]
+    comparison_image = npm.zeros_like(urban_array, dtype=npm.uint8)
+
+    for i in range(LiDAR_image.shape[0]):
+        for j in range(LiDAR_image.shape[1]):
+            # Compute intensity values for each classification
+            urban_value = npm.mean(urban_array[i, j])
+            grassland_value = npm.mean(grassland_array[i, j])
+            water_value = npm.mean(water_array[i, j])
+            industrial_value = npm.mean(industrial_array[i, j])
+
+            # Determine the strongest classification
+            max_value = max(urban_value, grassland_value, water_value, industrial_value)
+
+            if max_value == urban_value:
+                comparison_image[i, j] = (95,80,80)
+            elif max_value == grassland_value:
+                comparison_image[i, j] = (70,130,70)
+            elif max_value == water_value:
+                comparison_image[i, j] = (80,80,140)
+            elif max_value == industrial_value:
+                comparison_image[i, j] = (220,220,220)
+
+    # Show the final classified image
+    Image.fromarray(comparison_image, "RGB").show()
