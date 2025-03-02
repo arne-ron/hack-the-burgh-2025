@@ -5,33 +5,26 @@ from clamp import clamp
 
 
 
-def upscaleArray(arr, directionField, depthmap, threshold):
+def upscaleArray(arr, directionField, threshold):
     factor = 10
     newArray = []
     histogramList = []
-    max_pixel_step = 3
     for x in range(arr.shape[0] * factor // 2):
         newArray.append([])
         for y in range(arr.shape[1] * factor // 3 + 500):
             if y < 500:
                 continue
-            pos = find_nearest_edge(x, y, directionField, threshold)
-            direction = directionField[pos[0], pos[1]]
             direction = directionField[x,y]
             offset=[0,0]
-            
-            delta = depthmap[x, y] - depthmap[x + direction[0], y + direction[1]]
-            if delta > 0.5:
-                direction = -direction
 
             if direction[0] > threshold:
-                offset[0] = offset[0] + int(clamp(mag_sq(direction), 1, max_pixel_step))
+                offset[0] = offset[0] + 1
             elif direction[0] < -threshold:
-                offset[0] = offset[0] - int(clamp(mag_sq(direction), 1, max_pixel_step))
+                offset[0] = offset[0] - 1
             if direction[1] > threshold:
-                offset[1] = offset[1] - int(clamp(mag_sq(direction), 1, max_pixel_step))
+                offset[1] = offset[1] - 1
             elif direction[1] < -threshold:
-                offset[1] = offset[1] + int(clamp(mag_sq(direction), 1, max_pixel_step))
+                offset[1] = offset[1] + 1
                         
             newArray[x].append(arr[clamp(x//factor + offset[0],0,len(arr)-1), clamp(y//factor + offset[1],0,len(arr)-1)])
     #         histogramList.append(direction[0]*direction[0] + direction[1]*direction[1])
@@ -48,7 +41,7 @@ def upscaleArray(arr, directionField, depthmap, threshold):
 
 def find_nearest_edge(x, y, directionField, threshold):
     i = 1
-    while (i <= 30): 
+    while (i <= 100): 
         current = directionField[x+i, y]
         if mag_sq(current) > threshold:
             return (x+i, y)
