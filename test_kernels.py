@@ -3,16 +3,17 @@ import numpy as np
 
 from run_kernel import run_kernel1D_arr
 from kernels import xSobel, ySobel, testKernels
+import time
 
 
 input_path_LiDAR_1 = 'data/DSM_TQ0075_P_12757_20230109_20230315.tif'
 LiDAR_1 = Image.open(input_path_LiDAR_1)
 
-
+start_time = time.time()
 print("Caching start...")
 
 # Normal Resolution caching of the gradient
-LiDAR_1_reduced = LiDAR_1.resize((1000, 1000))
+LiDAR_1_reduced = LiDAR_1 #.resize((1000, 1000))
 arr_reduced = np.array(LiDAR_1_reduced)
 for n in range(len(testKernels)):
     kernel = np.array(testKernels[n])
@@ -25,4 +26,4 @@ for n in range(len(testKernels)):
     gradient_reduced = Image.fromarray(gradientArr_reduced, "RGB")
     gradient_reduced.save("cache/testkernel" + str(n) + ".tiff")
 
-print("Caching successful!")
+print("Caching successful! "+ str(time.time() - start_time) + " seconds")
