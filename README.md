@@ -6,7 +6,7 @@ Additionally, the landscape should be analysed in regards to classification and 
 The running the main.py file performs the calculations on the data given in /data and saves the upscaled image as a "upscaled.tif" in the current folder.
 Own images can be used by setting the input_path_* variables.
 
-The landuse data is created by analysing all 3 datasets, the elevation on a normalised lidar, the degree of redness in the grass satellite image, and the colour values of the satellite image. Then each land type was created as an object and expected values for every pixel in the above datasets assigned to it, then each pixel was weighted to how likely it was to be each land type. Then the probabilities were overlayed and the most likely land use type displayed in the following colours:
+The land use data is created by analysing all 3 datasets, the elevation on a normalised lidar, the degree of redness in the grass satellite image, and the colour values of the satellite image. Then each land type was created as an object and expected values for every pixel in the above datasets assigned to it, then each pixel was weighted to how likely it was to be each land type. Then the probabilities were overlayed and the most likely land use type displayed in the following colours:
 Note: On a new MacBook Pro it takes at least 2-5 minutes to run the file, possibly longer on other devices.
 
 Key:
