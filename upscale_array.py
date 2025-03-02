@@ -9,38 +9,38 @@ def upscaleArray(arr, directionField, depthmap, threshold):
     factor = 10
     newArray = []
     histogramList = []
-    max_pixel_step = 3
-    for x in range(arr.shape[0] * factor // 2):
+    max_pixel_step = 5
+    for x in range(arr.shape[0] * factor):
         newArray.append([])
-        for y in range(arr.shape[1] * factor // 3 + 500):
-            if y < 500:
-                continue
+        for y in range(arr.shape[1] * factor):
+            # if y < 500:
+            #     continue
             pos = find_nearest_edge(x, y, directionField, threshold)
             direction = directionField[pos[0], pos[1]]
             direction = directionField[x,y]
             offset=[0,0]
             
-            delta = depthmap[x, y] - depthmap[x + direction[0], y + direction[1]]
-            if delta > 0.5:
+            delta = depthmap[x, y] - depthmap[clamp(x + direction[0], 0, len(depthmap) - 1), clamp(y + direction[1],0,len(depthmap) - 1)]
+            if delta > 0.1:
                 direction = -direction
 
-            if direction[0] > threshold:
-                offset[0] = offset[0] + int(clamp(mag_sq(direction), 1, max_pixel_step))
-            elif direction[0] < -threshold:
-                offset[0] = offset[0] - int(clamp(mag_sq(direction), 1, max_pixel_step))
-            if direction[1] > threshold:
-                offset[1] = offset[1] - int(clamp(mag_sq(direction), 1, max_pixel_step))
-            elif direction[1] < -threshold:
-                offset[1] = offset[1] + int(clamp(mag_sq(direction), 1, max_pixel_step))
-                        
-            newArray[x].append(arr[clamp(x//factor + offset[0],0,len(arr)-1), clamp(y//factor + offset[1],0,len(arr)-1)])
-    #         histogramList.append(direction[0]*direction[0] + direction[1]*direction[1])
+            step = int(clamp(mag_sq(direction)/10, 1, max_pixel_step))
 
-    # plt.hist(histogramList, bins=100, density=True, alpha=0.6, color='g', log=True)
-    # plt.xlabel('squared dist')
-    # plt.ylabel('Amount')
-    # plt.title('Density Distribution of magnitudes')
-    # plt.show()
+            if direction[0] > threshold:
+                offset[0] = offset[0] + step
+            elif direction[0] < -threshold:
+                offset[0] = offset[0] - step
+            if direction[1] > threshold:
+                offset[1] = offset[1] - step
+            elif direction[1] < -threshold:
+                offset[1] = offset[1] + step
+                        
+            
+            color = arr[clamp(x//factor + offset[0],0,len(arr)-1), clamp(y//factor + offset[1],0,len(arr)-1)]
+            newArray[x].append(color)
+                
+    
+
     
     return np.array(newArray, dtype=np.uint8)
 
@@ -49,18 +49,21 @@ def upscaleArray(arr, directionField, depthmap, threshold):
 def find_nearest_edge(x, y, directionField, threshold):
     i = 1
     while (i <= 30): 
-        current = directionField[x+i, y]
-        if mag_sq(current) > threshold:
-            return (x+i, y)
-        current = directionField[x-i, y]
-        if mag_sq(current) > threshold:
-            return (x+i, y)
-        current = directionField[x, y+i]
-        if mag_sq(current) > threshold:
-            return (x+i, y)
-        current = directionField[x, y-i]
-        if mag_sq(current) > threshold:
-            return (x+i, y)
+        try:
+            current = directionField[x+i, y]
+            if mag_sq(current) > threshold:
+                return (x+i, y)
+            current = directionField[x-i, y]
+            if mag_sq(current) > threshold:
+                return (x-i, y)
+            current = directionField[x, y+i]
+            if mag_sq(current) > threshold:
+                return (x, y+i)
+            current = directionField[x, y-i]
+            if mag_sq(current) > threshold:
+                return (x, y-i)
+        except:
+            pass
         i += 1
     return (x, y)
 
