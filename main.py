@@ -47,7 +47,7 @@ print("Running...")
 #Upscale the image - from 1 pixel to 10 pixels
 array = np.array(sat_1)
 gradient_arr = np.array(gradient)
-new_image_arr = upscaleArray(array, gradient_arr)
+new_image_arr = upscaleArray(array, gradient_arr, threshold=5)
 img_res = Image.fromarray(new_image_arr, "RGB")  
 img_res.show()
 sat_1.show()
