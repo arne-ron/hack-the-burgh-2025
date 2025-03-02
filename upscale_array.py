@@ -8,7 +8,7 @@ def upscaleArray(arr, directionField):
     newArray = []
     for x in range(arr.shape[0] * factor):
         newArray.append([])
-        for y in range(arr.shape[1 * factor]):
+        for y in range(arr.shape[1] * factor):
             direction = directionField[x,y]
             offset=[0,0]
             if direction[0] > 1:
