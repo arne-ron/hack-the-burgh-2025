@@ -12,11 +12,13 @@ input_path_LiDAR_1 = 'data/DSM_TQ0075_P_12757_20230109_20230315.tif'
 start_time = time.time()
 print("Caching start...")
 
+ySobelBig = np.array(ySobel)
+
 # Normal Resolution caching of the gradient
 LiDAR_1 = Image.open(input_path_LiDAR_1)
 arr = np.array(LiDAR_1)
-red = run_kernel1D_arr(arr, xSobel)
-green = run_kernel1D_arr(arr, ySobel)
+red = run_kernel1D_arr(arr, ySobelBig.transpose())
+green = run_kernel1D_arr(arr, ySobelBig)
 
 gradientArr = np.dstack((red, green, np.zeros(LiDAR_1.size))).astype(np.uint8)
 
