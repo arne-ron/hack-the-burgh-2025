@@ -7,7 +7,7 @@ import time
 from run_kernel import run_kernelRGB, run_kernel1D, run_kernel1D_arr
 from kernels import xSobel, ySobel
 from upscale_array import upscaleArray
-
+from clamp import clamp
 
 RUN_REDUCED = True
 
