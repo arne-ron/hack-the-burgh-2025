@@ -12,7 +12,7 @@ input_path_LiDAR_1 = 'data/DSM_TQ0075_P_12757_20230109_20230315.tif'
 start_time = time.time()
 print("Caching start...")
 
-ySobelBig = np.array(ySobel)
+ySobelBig = np.array(ySobelBig)
 
 # Normal Resolution caching of the gradient
 LiDAR_1 = Image.open(input_path_LiDAR_1)

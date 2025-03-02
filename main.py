@@ -9,6 +9,7 @@ from kernels import xSobel, ySobel, ySobelBig
 from upscale_array import upscaleArray
 from clamp import clamp
 
+
 RUN_REDUCED = False
 
 
@@ -27,13 +28,15 @@ output_path_sat = 'out/upscaled.tif'
 
 
 
-sat_1 = Image.open(input_path_sat_1)
+sat_1 = Image.open(input_path_sat_2)
 # sat_2 = Image.open(input_path_sat_2)
 if RUN_REDUCED:
     sat_1 = sat_1.resize((100, 100))
     # sat_2 = sat_2.resize((100, 100))
 
 gradient = Image.open(gradient_cache)
+
+
 
 
 
@@ -47,12 +50,11 @@ print("Running...")
 # Upscale the image - from 1 pixel to 10 pixels
 array = np.array(sat_1)
 gradient_arr = np.array(gradient)
-new_image_arr = upscaleArray(array, gradient_arr, threshold=5)
-img_res = Image.fromarray(new_image_arr, "RGB")  
+new_image_arr = upscaleArray(array, gradient_arr, threshold=25)
+img_res = Image.fromarray(new_image_arr, "RGB")
+img_res.save(output_path_sat)
 img_res.show()
 sat_1.show()
-img_res.save(output_path_sat)
-
 
 
 end_time = time.time()

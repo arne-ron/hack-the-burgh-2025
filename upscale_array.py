@@ -9,16 +9,18 @@ def upscaleArray(arr, directionField, threshold):
     factor = 10
     newArray = []
     histogramList = []
-    for x in range(arr.shape[0] * factor):
+    for x in range(arr.shape[0] * factor // 2):
         newArray.append([])
-        for y in range(arr.shape[1] * factor):
+        for y in range(arr.shape[1] * factor // 3 + 500):
+            if y < 500:
+                continue
             direction = directionField[x,y]
             offset=[0,0]
 
             if direction[0] > threshold:
-                offset[0] = offset[0] - 1
-            elif direction[0] < -threshold:
                 offset[0] = offset[0] + 1
+            elif direction[0] < -threshold:
+                offset[0] = offset[0] - 1
             if direction[1] > threshold:
                 offset[1] = offset[1] - 1
             elif direction[1] < -threshold:
