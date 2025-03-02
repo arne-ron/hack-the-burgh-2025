@@ -48,4 +48,5 @@ def landuse_objects(LiDAR_image, sat_image, red_image):
                     weighting = (elevation_weighting + redColor_weighting + satColor_weighting) / 3
                 weighted_color = [int(c * weighting) for c in obj.disColor]
                 newImage[i][j] = weighted_color
+                print(weighted_color)
         Image.fromarray(newImage.astype(npm.uint8), "RGB").show()
