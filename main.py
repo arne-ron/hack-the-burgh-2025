@@ -4,9 +4,7 @@ import time
 
 
 from run_kernel import run_kernelRGB, run_kernel1D, run_kernel1D_arr
-from kernels import xSobel, ySobel, ySobelBig
 #from upscale_array import upscaleArray, upscaleArrayNew
-from clamp import clamp
 from landuse_objects import landuse_objects
 from normalize import normalize
 
@@ -30,20 +28,9 @@ input_path_LiDAR_1 = 'data/DSM_TQ0075_P_12757_20230109_20230315.tif'
 
 
 output_path_sat = 'upscaled.tif'
-output_path_sat = 'out/upscaled.tif'
 
 normalized_LiDAR = Image.open(input_path_normalized_LiDAR)
 
-
-sat_1 = Image.open(input_path_sat_1)
-sat_2 = Image.open(input_path_sat_2)
-# sat_2 = Image.open(input_path_sat_2)
-LiDAR = Image.open(input_path_LiDAR_1)
-if RUN_REDUCED:
-    sat_1 = sat_1.resize((100, 100))
-    # sat_2 = sat_2.resize((100, 100))
-
-gradient = Image.open(gradient_cache)
 
 
 
@@ -78,7 +65,7 @@ img_res.show()
 # img_res.save(output_path_sat)
 
 landuseLiDARImage = np.array(normalized_LiDAR.resize((1000,1000)))
-landuseSatImage = np.array(sat_1.resize((1000,1000)))
+landuseSatImage = np.array(sat_img.resize((1000,1000)))
 landuseRedImage = np.array(sat_2.resize((1000,1000)))
 
 landuse_objects(landuseLiDARImage, landuseSatImage, landuseRedImage)
