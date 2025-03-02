@@ -9,7 +9,7 @@ from kernels import xSobel, ySobel
 from upscale_array import upscaleArray
 from clamp import clamp
 
-RUN_REDUCED = True
+RUN_REDUCED = False
 
 
 # Original satelite images with 10m x 10m accuracy
